@@ -2,8 +2,17 @@ def sum_mas(mas):
     S = []
     for i in mas:
         S += i
-    return mas
+    return S
 
+
+def setmove(self, x, y):
+    self.koords = [x, y]
+    #смена местоположения кнопки
+
+
+def nasatie():
+    pass
+    #кнопка на которую нажали
 
 
 masWhit = sum_mas([[[(j + i%2 + 1) % 8, i] for j in range(0, 8, 2)]
@@ -16,12 +25,15 @@ mas = masWhit + masBlak
 class WhiteShashka():
     def __init__(self, x, y):
         self.koords = [x, y]
-    
-    
+        self.tec = False
+
+
     def hod(self, x, y):
         global mas
         x0, y0 = self.koords
-        if [x, y] in mas:
+        if (x0, y0) == (x, y):
+            self.tec = True
+        if [x, y, self] in mas or abs(x - x0) != abs(y - y0):
             return -1
         if abs(x - x0) > 2 or abs(y - y0) > 2:
             return -1
@@ -34,15 +46,16 @@ class WhiteShashka():
                 y1 = y + 1
             else:
                 y1 = y - 1
-            if [x1, y1] in masBlak:
+            if [x1, y1, self] in masBlak:
                 delit(x1, y1)
                 setmove(self, x, y)
                 return 0
             else:
                 return -1
+        if y < y0:
+            return -1
         setmove(self, x, y)
         return 0
-
 
 
 class BlackShashka():
@@ -54,7 +67,7 @@ class BlackShashka():
         global mas
         x0, y0 = self.koords
         if x0 == x and y0 == y:
-            changeCvet()
+            self.tec = True
         if [x, y] in mas:
             return -1
         if abs(x - x0) > 2 or abs(y - y0) > 2:
@@ -74,6 +87,8 @@ class BlackShashka():
                 return 0
             else:
                 return -1
+        if y > y0:
+            return -1
         setmove(self, x, y)
         return 0
 
@@ -90,11 +105,6 @@ def hodit(self):
     self.hod(x, y)
     return 0
 
-
-#while mas != []:
-#    x, y, self = askKoordsHoda()
-#    while hodit(self) == -1:
-#        x, y, self = askKoordsHoda()
 a = [0, BlackShashka(0, 2)]
 
 
@@ -113,4 +123,6 @@ class Board():
                     self.desk[i][j] = BlackShashka(i, j)
                 elif self.desk[i][j] == 1:
                     self.desk[i][j] = WhiteShashka(i, j)
+
+
 a = Board()
